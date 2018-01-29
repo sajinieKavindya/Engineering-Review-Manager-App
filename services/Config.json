@@ -1,0 +1,18 @@
+{ "sql" :{
+      "jdbcURL":"",
+      "username": "",
+      "password": "",
+      "PQD_jdbcURL":"",
+      "PQD_username": "",
+      "PQD_password": ""
+        },
+
+  "gmail":{
+    "recipientEmail":"",
+    "userId":"",
+    "accessToken":"",
+    "refreshToken":"",
+    "clientId":"",
+    "clientSecret":""
+  }
+}

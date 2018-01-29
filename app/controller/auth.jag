@@ -1,0 +1,38 @@
+<%
+var log = new Log("Engineering Review");
+include("../constants.jag");
+
+
+var jwtClientModule = require('../js/jwt-client.js');
+var jwtClient = new jwtClientModule.JWTClient(request, JWT_HEADER_NAME, CERTIFICATE_PATH);
+
+jwtClient.init();
+
+log.debug("JWT = " + jwtClient.jwt);
+
+var emailAddress;
+
+log.debug("Boolean : " + jwtClient.isJWTPresent());
+log.debug("Certificate path : " + jwtClient.certificatePath);
+
+if(jwtClient.isJWTPresent()){
+    try {
+
+        jwtClient.parse();
+
+        log.info("Verified the signature of the JWT.");
+
+        var is_valid_session = true;
+
+        var claims = jwtClient.getClaims();
+
+        emailAddress = claims.get("http://wso2.org/claims/emailaddress");
+
+    } catch(e){
+        log.error("Authentication failure. Something went wrong " + e);
+    }
+} else{
+    log.info("User is not authenticated. Redirecting...");
+    response.sendRedirect(SSO_LOGIN_URL);
+}
+%>

@@ -1,0 +1,8 @@
+<%
+var BALLERINA_SERVICE_BASE_PATH = "";
+var JWT_HEADER_NAME = "X-JWT-Assertion";
+var CERTIFICATE_PATH = "";
+var SSO_LOGIN_URL = "https://apps.wso2.com";
+var WSO2_LOGOUT_URL = "https://apps.wso2.com/logout/store";
+
+%>

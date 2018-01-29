@@ -1,0 +1,146 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+    <title>Review Manager</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+	<link href="../css/styles.css" rel="stylesheet">
+	<link href="../css/wso2Theme/theme-wso2.css" rel="stylesheet">
+
+</head>
+<body>
+    <!-- header -->
+    <header class="header header-default">
+        <div class="container-fluid">
+            <div class="pull-left brand">
+              <a href="#">
+                 <img src="../img/logo-inverse.svg" alt="wso2" title="wso2" class="logo">
+                 <span>Engineering Review</span>
+              </a>
+            </div>
+        </div>
+    </header>
+    <!-- /header -->
+<div class="container-fluid">
+<div class="row">
+    <div class="col-lg-3 col-md-2 col-sm-1"></div>
+    <div class="col-lg-6 col-md-8 col-sm-10 col-xs-12">
+<%
+var log = new Log("Engineering Review Mgt");
+
+try{
+    include("auth.jag");
+
+    log.debug("extracting request details.");
+    var Reporter = request.getParameter('Reporter');
+    log.debug("Reporter detail received : " + Reporter);
+
+    var Contributor = request.getParameter('Contributor');
+    log.debug("Contributor detail received : " + Contributor);
+
+    var Participants = request.getParameter('Participants');
+    log.debug("Participants detail received : " + Participants);
+
+    var GroupEmails = request.getParameter('GroupEmail');
+    log.debug("GroupEmail details received : " + GroupEmails);
+
+    var ReviewType = request.getParameter('ReviewType');
+    log.debug("ReviewType detail received : " + ReviewType);
+
+    var ReviewDateAndTime = request.getParameter('ReviewedDate');
+    log.debug("Review date and time detail received : " + ReviewDateAndTime);
+
+    log.debug("Splitting "+ReviewDateAndTime+" by space");
+    var ReviewDateArray = ReviewDateAndTime.split(" ");
+    var ReviewDate = ReviewDateArray[0];
+    log.debug("Review date detail received : " + ReviewDate);
+
+    var TeamDetails = request.getParameter('Team');
+    log.debug("Team detail received : " + TeamDetails);
+
+    log.debug("Splitting "+TeamDetails+" by comma");
+    var TeamDetailArray = TeamDetails.split(",");
+
+    var TeamId = TeamDetailArray[0];
+    log.debug("Team Id detail received : " + TeamId);
+
+    var TeamName = TeamDetailArray[1];
+    log.debug("Team Name detail received : " + TeamName);
+
+    var ProductDetails = request.getParameter('product');
+    log.debug("Product details received : " + ProductDetails);
+
+    log.debug("Splitting "+ProductDetails+" by comma");
+    var ProductDetailArray = ProductDetails.split(",");
+
+    var ProductId = ProductDetailArray[0];
+    log.debug("Product Id detail received : " + ProductId);
+
+    var ProductName = ProductDetailArray[1];
+    log.debug("Product Name detail received : " + ProductName);
+
+    var ProductVersion = request.getParameter('ProductVersion');
+    log.debug("Product Version detail received : " + ProductVersion);
+
+    var ComponentName = request.getParameter('Component');
+    log.debug("Component Name detail received : " + ComponentName);
+
+    var ComponentVersion = request.getParameter('ComponentVersion');
+    log.debug("Component Version detail received : " + ComponentVersion);
+
+    var ReviewNotes = request.getParameter('ReviewNotes');
+    log.debug("ReviewNotes detail received : " + ReviewNotes);
+
+    var Reference = request.getParameter('Reference');
+    log.debug("Reference detail received : " + Reference);
+
+
+    var data = {
+        "Reporter": emailAddress,
+        "Contributor":Contributor,
+        "Participants" :Participants,
+        "GroupEmails":GroupEmails,
+        "ReviewType":ReviewType,
+        "ReviewDate":ReviewDate,
+        "TeamId": TeamId,
+        "TeamName": TeamName,
+        "ProductName": ProductName,
+        "ProductVersion": ProductVersion,
+        "ComponentName": ComponentName,
+        "ComponentVersion": ComponentVersion,
+        "ReviewNotes": ReviewNotes,
+        "Reference": Reference
+    };
+
+    log.debug("Submiting Review details");
+    var submit = post(BALLERINA_SERVICE_BASE_PATH + "/reviews", stringify(data), {'Content-type':'application/json'}, "json");
+
+    if(submit && submit.data.error.status === false){
+        print(<div class="alert alert-success"><strong>Success!</strong>Your Review was recorded.</div>);
+        log.info("Review was submitted successfully!");
+    }else{ %>
+        <div class="alert alert-danger"><% print(submit.data.error.msg);%></div> <%
+        log.error("Error occurred. Error message: " +submit.data.error.msg );
+    }
+}catch (error){
+    print(<div class="alert alert-danger"><strong>Sorry!</strong> Review was not submitted.</div>);
+    log.error("Error occurred. Error message: " +error );
+
+}finally {
+    print(<div>Click <a href="../index.jag" ><strong>here</strong></a> to go back.</div>);
+}
+%>
+    </div>
+    <div class="col-lg-3 col-md-2 col-sm-1"></div>
+</div>
+</div>
+
+</body>
+
+</html>

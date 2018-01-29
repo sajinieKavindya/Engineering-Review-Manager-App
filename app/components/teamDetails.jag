@@ -1,0 +1,30 @@
+
+<%
+var log = new Log("Engineering Review Mgt");
+var errorResponse = {"error":{"status":true, "msg": ""}}
+log.debug("Getting team details");
+include("../constants.jag");
+
+try {
+    var teamJSONResponse = get(BALLERINA_SERVICE_BASE_PATH + "/teams", {}, "json");
+    log.debug("Team details get response : " + teamJSONResponse.data);
+
+    var teamDetails = teamJSONResponse.data;
+    if(teamDetails.error.status === false){
+        log.info("Successfully retrieve team details");
+        print(teamJSONResponse.data);
+    }else{
+        log.error(teamDetails.error.msg);
+        errorResponse.error.msg = "Something went wrong!";
+        print(errorResponse);
+    }
+
+}catch (error){
+    log.error("Failed to load team details: " + error);
+    errorResponse.error.msg = "Data failed to load. Check your connection.";
+    print(errorResponse);
+}
+%>
+
+
+

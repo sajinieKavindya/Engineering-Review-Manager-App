@@ -1,0 +1,30 @@
+<%
+try {
+    include("../constants.jag");
+    var typeJSONResponse = get(BALLERINA_SERVICE_BASE_PATH + "/types", {}, "json");
+
+    %>
+        <select class="form-control" id="ReviewType" name="ReviewType" style="border-radius: 4px; padding: 5px;">
+        <option value = ""></option>
+            <%
+    for (var i = 0; i < typeJSONResponse.data.types.length; i++) {
+        %>
+        <option value = '<%print(typeJSONResponse.data.types[i]);
+        %>'> <%print(typeJSONResponse.data.types[i]);
+        %> </option>
+    <%
+    }
+    %>
+    </select>
+    <%
+
+}catch(error){
+    log.error("Failed to load review types: " + error);
+    print(<div class="alert alert-danger" role="alert">Data failed to load. Check your connection.</div>);
+}
+%>
+
+
+
+
+

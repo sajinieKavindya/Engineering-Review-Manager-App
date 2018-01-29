@@ -1,0 +1,34 @@
+<%
+var log = new Log("Engineering Review Mgt");
+var pathParam = request.getParameter("team");
+log.debug("Splitting "+pathParam+" by comma");
+var TeamDetailArray = pathParam.split(",");
+var teamId = TeamDetailArray[0];
+
+var errorResponse = {"error":{"status":true, "msg": ""}}
+log.debug("Getting product details");
+try {
+    include("../constants.jag");
+
+    var productJSONResponse = get(BALLERINA_SERVICE_BASE_PATH + "/products/" + teamId, {}, "json");
+
+    log.debug("Product details get response : " + productJSONResponse.data);
+
+    var productDetails = productJSONResponse.data;
+    if(productDetails.error.status === false){
+        log.info("Successfully retrieve product details");
+        print(productJSONResponse.data);
+    }else{
+        log.error(productDetails.error.msg);
+        errorResponse.error.msg = "Something went wrong!";
+        print(errorResponse);
+    }
+
+}catch (error){
+    log.error("Failed to load product details: " + error);
+    errorResponse.error.msg = "Data failed to load. Check you connection.";
+    print(errorResponse);
+}
+%>
+
+
