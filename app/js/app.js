@@ -129,7 +129,7 @@ $(document).ready(function() {
 
     $('#componentSection').focusout(function(){
         componentNameForTitle = document.getElementById('Component').value;
-        document.getElementById('mainTitle').innerHTML = "Create Review - " + reviewTypeForTitle +" "+ componentNameForTitle;
+        document.getElementById('mainTitle').innerHTML = "Review Summary - " + reviewTypeForTitle +" "+ componentNameForTitle;
 
     });
 
@@ -170,7 +170,7 @@ $(document).on('change','#Team',function(){
 $(document).on('change','#ReviewType',function(){
     var reviewType = document.getElementById('ReviewType').value;
     reviewTypeForTitle = "[ " + reviewType + " ]";
-    document.getElementById('mainTitle').innerHTML = "Create Review - " + reviewTypeForTitle + " " + componentNameForTitle;
+    document.getElementById('mainTitle').innerHTML = "Review Summary- " + reviewTypeForTitle + " " + componentNameForTitle;
 });
 
 $(document).on('change','#datetimepicker1',function(){
